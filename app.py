@@ -36,17 +36,24 @@ MASTER_PELANGGARAN = {
     }
 }
 
-# Koneksi ke Google Sheets / File Local
+URL_SPREADSHEET = "https://docs.google.com/spreadsheets/d/1sXaimT9QsQNq6w-y9HzNL57b819ohIFo_QIk0_EqBxw/edit?usp=sharing/edit".strip()
+
 conn = st.connection("gsheets", type=GSheetsConnection)
 
 @st.cache_data(ttl=60)
 def load_data_siswa():
-    # Membaca data siswa (X-1 s.d XII-12)
-    return conn.read(worksheet="NAMA SISWA", usecols=["NO", "NAMA SISWA", "KELAS"])
+    return conn.read(
+        spreadsheet=URL_SPREADSHEET, 
+        worksheet="NAMA SISWA", 
+        usecols=["NO", "NAMA SISWA", "KELAS"]
+    )
 
 @st.cache_data(ttl=10)
 def load_data_pelanggaran():
-    return conn.read(worksheet="PELANGGARAN")
+    return conn.read(
+        spreadsheet=URL_SPREADSHEET, 
+        worksheet="PELANGGARAN"
+    )
 
 st.title("🏫 Sistem Informasi Pelanggaran Siswa - SMAN 11 Bandung")
 
